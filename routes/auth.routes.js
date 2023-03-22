@@ -118,9 +118,11 @@ router.post(
         });
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.jwtSecret, {
-        expiresIn: "1h",
-      });
+      const token = jwt.sign({ userId: user.id }, process.env.jwtSecret); //without expire
+      //if time has passed, you must also check when you first visit the page whether the time has expired
+      // const token = jwt.sign({ userId: user.id }, process.env.jwtSecret, {
+      //   expiresIn: "1h",
+      // });
       res.json({
         token,
         id: user.id,

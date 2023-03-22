@@ -19,7 +19,7 @@ app.use(cors());
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5, // 5 requests,
+  max: 15, // 15 requests,
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   message: async (request, response) => {
     response.json({
@@ -29,7 +29,7 @@ const limiter = rateLimit({
   },
 });
 
-// app.use("/api/auth", limiter);
+app.use("/api/auth", limiter);
 
 app.use("/api/auth", authRouter);
 
