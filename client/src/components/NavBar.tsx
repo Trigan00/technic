@@ -6,16 +6,18 @@ import {
   Container,
   Icon,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Sanitize from "../helpers/Sanitize";
+import shortenText from "../helpers/shortenText";
 import { useAuth } from "../hooks/useAuth";
-import { useTypedSelector } from "../store/hooks/useTypedSelector";
 import { consts } from "../utils/routsConsts";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { email } = useTypedSelector((state) => state.user);
+  const { isAuth, email, username } = useAuth();
 
   const signOutHandler = () => {
     logout();
@@ -35,32 +37,53 @@ const NavBar: React.FC = () => {
               Rinaz Technic
             </Box>
 
-            <span>{email}</span>
-            <Button
-              color="inherit"
-              onClick={() => navigate(consts.LOGIN_ROUTE)}
-            >
-              Войти
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => navigate(consts.REGISTRATION_ROUTE)}
-            >
-              Зарегистрироваться
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => navigate(consts.ADMIN_ROUTE)}
-            >
-              Админ
-            </Button>
-            <IconButton
-              sx={{ color: "white" }}
-              size="small"
-              onClick={signOutHandler}
-            >
-              <Icon>power_settings_new</Icon>
-            </IconButton>
+            {isAuth && (
+              <Tooltip
+                title={
+                  <Sanitize
+                    html={`<div>${username}</div><div>${email}</div>`}
+                  />
+                }
+              >
+                <Box
+                  sx={{
+                    p: 1,
+                    borderRadius: "5px",
+                    boxShadow:
+                      "rgba(50, 50, 93, 0.15) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                  }}
+                >
+                  {shortenText(username || "", 10)}
+                </Box>
+              </Tooltip>
+            )}
+
+            {!isAuth && (
+              <Button
+                color="inherit"
+                onClick={() => navigate(consts.LOGIN_ROUTE)}
+              >
+                Войти
+              </Button>
+            )}
+
+            {email === process.env.REACT_APP_ADMINEMAIL && (
+              <Button
+                color="inherit"
+                onClick={() => navigate(consts.ADMIN_ROUTE)}
+              >
+                Админ
+              </Button>
+            )}
+            {isAuth && (
+              <IconButton
+                sx={{ color: "white" }}
+                size="small"
+                onClick={signOutHandler}
+              >
+                <Icon>power_settings_new</Icon>
+              </IconButton>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

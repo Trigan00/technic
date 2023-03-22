@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
         boxSizing: "border-box",
       }}
     >
-      <h1>LoginPage</h1>
+      <h3 style={{ textAlign: "center" }}>Вход</h3>
       <Login />
 
       <Link

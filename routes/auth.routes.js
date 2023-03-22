@@ -31,7 +31,7 @@ router.post(
         });
       }
 
-      const { email, password } = req.body;
+      const { email, password, username } = req.body;
       const candidate = await Person.findAll({
         where: {
           email: email,
@@ -50,6 +50,7 @@ router.post(
       await Person.create({
         email,
         password: hashedPassword,
+        username,
         activationLink,
       });
 
@@ -125,7 +126,7 @@ router.post(
         id: user.id,
         email: user.email,
         isVerified: user.isVerified,
-        role: user.isAdmin,
+        username: user.username,
       });
     } catch (error) {
       console.log(error);

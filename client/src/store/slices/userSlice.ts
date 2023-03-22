@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface UserState {
   email: string | null;
   id: string | null;
-  isAdmin: boolean | null;
+  username: string | null;
   isVerified: boolean | null;
   token: string | null;
 }
@@ -11,7 +11,7 @@ export interface UserState {
 interface UserAction {
   email: string | null;
   id: string | null;
-  isAdmin: boolean | null;
+  username: string | null;
   isVerified: boolean | null;
   token: string | null;
 }
@@ -19,7 +19,7 @@ interface UserAction {
 const initialState: UserState = {
   email: null,
   id: null,
-  isAdmin: null,
+  username: null,
   isVerified: null,
   token: null,
 };
@@ -31,14 +31,14 @@ const userSlice = createSlice({
     setUser(state, action: PayloadAction<UserAction>) {
       state.email = action.payload.email;
       state.id = action.payload.id;
-      state.isAdmin = action.payload.isAdmin;
+      state.username = action.payload.username;
       state.isVerified = action.payload.isVerified;
       state.token = action.payload.token;
     },
     removeUser(state) {
       state.email = null;
       state.id = null;
-      state.isAdmin = null;
+      state.username = null;
       state.isVerified = null;
       state.token = null;
     },

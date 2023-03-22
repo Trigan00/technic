@@ -3,15 +3,16 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "../store/slices/alertSlice";
 import { useHttp } from "../hooks/useHttp";
 import Form from "../UI/Form";
-import { consts } from "../utils/routsConsts";
-import { useNavigate } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const { request, loading, error } = useHttp();
-  const navigate = useNavigate();
 
-  const registerHandler = async (email: string, password: string) => {
+  const registerHandler = async (
+    email: string,
+    password: string,
+    username: string | undefined
+  ) => {
     try {
       const res = await request(
         `${process.env.REACT_APP_SERVERURL}/api/auth/register`,
@@ -19,6 +20,7 @@ const SignUp: React.FC = () => {
         {
           email,
           password,
+          username,
         }
       );
       if (res) {

@@ -15,7 +15,7 @@ const RegisterPage: React.FC = () => {
         boxSizing: "border-box",
       }}
     >
-      <h1>RegisterPage</h1>
+      <h3 style={{ textAlign: "center" }}>Регистрация</h3>
       <SignUp />
       <p>
         <Link

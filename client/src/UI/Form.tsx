@@ -8,7 +8,7 @@ interface FormProps {
   isSignUp: boolean;
   title: string;
   isLoading: boolean;
-  onSubmit: (email: string, password: string) => void;
+  onSubmit: (email: string, password: string, username?: string) => void;
   error: any;
 }
 
@@ -24,6 +24,8 @@ const Form: React.FC<FormProps> = ({
     email: "",
     password: "",
   });
+  const [username, setUsername] = useState<string>("");
+  const [usernameErorr, setUsernameErorr] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [errorMsg, setErrorMsg] = useState({ email: "", password: "" });
@@ -53,7 +55,11 @@ const Form: React.FC<FormProps> = ({
   const submitHandler = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMsg({ email: "", password: "" });
+    setUsernameErorr("");
     setConfirmPasswordError("");
+    if (isSignUp && !username.trim().length) {
+      return setUsernameErorr("Поле не должно быть пустым");
+    }
     if (!form.email.trim().length || !form.password.trim().length) {
       return setErrorMsg({
         email: form.email.trim() ? "" : "Поле не должно быть пустым",
@@ -64,6 +70,7 @@ const Form: React.FC<FormProps> = ({
       return setConfirmPasswordError("Пароли не совпадают");
     }
 
+    if (isSignUp) return onSubmit(form.email, form.password, username);
     onSubmit(form.email, form.password);
   };
 
@@ -76,6 +83,21 @@ const Form: React.FC<FormProps> = ({
         flexDirection: "column",
       }}
     >
+      {isSignUp && (
+        <>
+          <TextField
+            label="Имя пользователя"
+            variant="filled"
+            margin="normal"
+            error={!!usernameErorr}
+            helperText={usernameErorr}
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+          />
+        </>
+      )}
       <TextField
         id="filled-basic"
         label="Email"

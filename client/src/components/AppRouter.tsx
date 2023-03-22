@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { adminRoutes, publicRoutes } from "../routes";
-import { useTypedSelector } from "../store/hooks/useTypedSelector";
 
 const AppRouter: React.FC = () => {
-  const { email } = useTypedSelector((state) => state.user);
+  const { email } = useAuth();
 
   return (
     <Routes>
