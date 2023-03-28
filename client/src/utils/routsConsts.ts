@@ -3,4 +3,5 @@ export const consts = {
   ADMIN_ROUTE: "/admin",
   LOGIN_ROUTE: "/login",
   REGISTRATION_ROUTE: "/registration",
+  TECHNIC_ROUTE: "/technic",
 };

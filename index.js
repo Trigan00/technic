@@ -1,10 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const authRouter = require("./routes/auth.routes");
+const adminRouter = require("./routes/admin.routes");
+const technicRouter = require("./routes/technic.routes");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 require("dotenv").config();
 const db = require("./models");
+const authMiddleware = require("./middleware/auth.middleware");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -16,6 +19,15 @@ app.use(
   })
 );
 app.use(cors());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+app.use(express.static(__dirname + "/technicImages"));
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -32,6 +44,8 @@ const limiter = rateLimit({
 app.use("/api/auth", limiter);
 
 app.use("/api/auth", authRouter);
+app.use("/api/technic", technicRouter);
+app.use("/api/admin", authMiddleware.isAdmin, adminRouter);
 
 (async () => {
   await db.sequelize.sync();

@@ -1,7 +1,12 @@
 import React from "react";
+import TechnicList from "../components/TechnicList";
 
 const HomePage: React.FC = () => {
-  return <h1>Home Page</h1>;
+  return (
+    <>
+      <TechnicList />
+    </>
+  );
 };
 
 export default HomePage;

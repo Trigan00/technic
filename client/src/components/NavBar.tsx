@@ -48,6 +48,7 @@ const NavBar: React.FC = () => {
                 <Box
                   sx={{
                     p: 1,
+                    mr: "5px",
                     borderRadius: "5px",
                     boxShadow:
                       "rgba(50, 50, 93, 0.15) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",

@@ -1,22 +1,53 @@
 const jwt = require("jsonwebtoken");
+const {
+  models: { Person },
+} = require("../models");
 require("dotenv").config();
 
-module.exports = (req, res, next) => {
-  if (req.method === "OPTIONS") {
-    return next();
-  }
+class Middleware {
+  async isAdmin(req, res, next) {
+    if (req.method === "OPTIONS") {
+      return next();
+    }
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      if (!token) {
+        return res.status(401).json({ message: "No authorization" });
+      }
 
-  try {
-    const token = req.headers.authorization.split(" ")[1]; // "Bearer TOKEN"
+      const decoded = jwt.verify(token, process.env.jwtSecret);
+      const users = await Person.findAll({
+        where: {
+          id: decoded.userId,
+        },
+      });
+      const user = users[0].dataValues;
+      if (user.isAdmin) return next();
 
-    if (!token) {
+      return res.status(401).json({ message: "Вы не администратор" });
+    } catch (e) {
+      console.log(e);
       return res.status(401).json({ message: "No authorization" });
     }
-
-    const decoded = jwt.verify(token, process.env.jwtSecret);
-    req.user = decoded;
-    next();
-  } catch (e) {
-    res.status(401).json({ message: "No authorization" });
   }
-};
+
+  decodeToken(req, res, next) {
+    if (req.method === "OPTIONS") return next();
+
+    try {
+      const token = req.headers.authorization.split(" ")[1]; // "Bearer TOKEN"
+
+      if (!token) {
+        return res.status(401).json({ message: "No authorization" });
+      }
+
+      const decoded = jwt.verify(token, process.env.jwtSecret);
+      req.user = decoded;
+      next();
+    } catch (e) {
+      res.status(401).json({ message: "No authorization" });
+    }
+  }
+}
+
+module.exports = new Middleware();

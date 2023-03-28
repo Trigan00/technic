@@ -2,6 +2,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminPage from "./pages/AdminPage";
+import TechnicPage from "./pages/TechnicPage";
 import { consts } from "./utils/routsConsts";
 
 export const adminRoutes = [
@@ -23,5 +24,9 @@ export const publicRoutes = [
   {
     path: consts.REGISTRATION_ROUTE,
     Component: RegisterPage,
+  },
+  {
+    path: consts.TECHNIC_ROUTE + "/:id",
+    Component: TechnicPage,
   },
 ];

@@ -7,11 +7,13 @@ interface loaderProps {
 
 const Loader: React.FC<loaderProps> = ({ color }) => {
   return (
-    <div className="lds-ellipsis" style={{ margin: "0 auto" }}>
-      <div style={{ backgroundColor: "#1976d2" || color }}></div>
-      <div style={{ backgroundColor: "#1976d2" || color }}></div>
-      <div style={{ backgroundColor: "#1976d2" || color }}></div>
-      <div style={{ backgroundColor: "#1976d2" || color }}></div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="lds-ellipsis" style={{ margin: "0 auto" }}>
+        <div style={{ backgroundColor: "#1976d2" || color }}></div>
+        <div style={{ backgroundColor: "#1976d2" || color }}></div>
+        <div style={{ backgroundColor: "#1976d2" || color }}></div>
+        <div style={{ backgroundColor: "#1976d2" || color }}></div>
+      </div>
     </div>
   );
 };

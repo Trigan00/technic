@@ -1,5 +1,5 @@
 const Router = require("express");
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const { body, validationResult } = require("express-validator");
@@ -34,7 +34,7 @@ router.post(
       const { email, password, username } = req.body;
       const candidate = await Person.findAll({
         where: {
-          email: email,
+          email,
         },
       });
 
@@ -99,13 +99,13 @@ router.post(
       // ]);
       const users = await Person.findAll({
         where: {
-          email: email,
+          email,
         },
       });
       if (!users.length) {
         return res.status(400).json({
           status: "failure",
-          message: "Invalid login or password, try again", //login
+          message: "Invalid login or password, try again", // login
         });
       }
       const user = users[0].dataValues;
@@ -114,12 +114,12 @@ router.post(
       if (!isMatch) {
         return res.status(400).json({
           status: "failure",
-          message: "Invalid login or password, try again", //password
+          message: "Invalid login or password, try again", // password
         });
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.jwtSecret); //without expire
-      //if time has passed, you must also check when you first visit the page whether the time has expired
+      const token = jwt.sign({ userId: user.id }, process.env.jwtSecret); // without expire
+      // if time has passed, you must also check when you first visit the page whether the time has expired
       // const token = jwt.sign({ userId: user.id }, process.env.jwtSecret, {
       //   expiresIn: "1h",
       // });
@@ -148,7 +148,7 @@ router.get("/activate/:link", async (req, res) => {
       { isVerified: true },
       {
         where: {
-          activationLink: activationLink,
+          activationLink,
         },
       }
     );

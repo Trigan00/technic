@@ -7,16 +7,18 @@ const AppRouter: React.FC = () => {
   const { email } = useAuth();
 
   return (
-    <Routes>
-      {email === process.env.REACT_APP_ADMINEMAIL &&
-        adminRoutes.map(({ path, Component }) => (
+    <>
+      <Routes>
+        {email === process.env.REACT_APP_ADMINEMAIL &&
+          adminRoutes.map(({ path, Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+        {publicRoutes.map(({ path, Component }) => (
           <Route key={path} path={path} element={<Component />} />
         ))}
-      {publicRoutes.map(({ path, Component }) => (
-        <Route key={path} path={path} element={<Component />} />
-      ))}
-      <Route path={"*"} element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path={"*"} element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 };
 
