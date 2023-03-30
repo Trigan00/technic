@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AdminNav from "../components/admin/AdminNav";
 import AddTechnic from "../components/admin/AddTechnic";
 import OrderList from "../components/admin/OrderList";
-import TechnicList from "../components/admin/TechnicArray";
+import TechnicArray from "../components/admin/TechnicArray";
 import styles from "./AdminPage.module.scss";
 
 const pages: any = {
@@ -11,10 +11,10 @@ const pages: any = {
     name: "Добваить технику",
     component: AddTechnic,
   },
-  TechnicList: {
-    componentName: "TechnicList",
+  TechnicArray: {
+    componentName: "TechnicArray",
     name: "Список техники",
-    component: TechnicList,
+    component: TechnicArray,
   },
   OrderList: {
     componentName: "OrderList",
@@ -30,7 +30,7 @@ const AdminPage: React.FC = () => {
 
   return (
     <div className={styles.Wrapper}>
-      <AdminNav setPage={setPage} pages={pages} />
+      <AdminNav setPage={setPage} pages={pages} currnetPage={page} />
       <div style={{ height: "fit-content", width: "100%" }}>
         <AdminComponent />
       </div>

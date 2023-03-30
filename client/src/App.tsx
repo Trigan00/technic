@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container } from "@mui/material";
+import { Container, createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import { useAuth } from "./hooks/useAuth";
@@ -8,6 +8,16 @@ import MyAlert from "./UI/MyAlert";
 import { useTypedSelector } from "./store/hooks/useTypedSelector";
 import { useTypedDispatch } from "./store/hooks/useTypedDispatch";
 import { fetchTechnic } from "./store/slices/technicSlice";
+import { orange } from "@mui/material/colors";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: orange[500],
+      contrastText: "#fff",
+    },
+  },
+});
 
 function App() {
   const selector = useTypedSelector((state) => state.alert);
@@ -24,17 +34,19 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Container>
-        <AppRouter />
-      </Container>
-      <MyAlert
-        message={selector.message}
-        open={selector.isOpen}
-        severity={selector.severity}
-      />
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <NavBar />
+        <Container>
+          <AppRouter />
+        </Container>
+        <MyAlert
+          message={selector.message}
+          open={selector.isOpen}
+          severity={selector.severity}
+        />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

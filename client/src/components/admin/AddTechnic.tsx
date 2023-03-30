@@ -5,12 +5,11 @@ import {
   Paper,
   TextField,
 } from "@mui/material";
-import React, { /* useRef,  */ useState } from "react";
+import React, { useState } from "react";
 import useAdmin from "../../hooks/useAdmin";
 import { useTypedDispatch } from "../../store/hooks/useTypedDispatch";
 import { setAlert } from "../../store/slices/alertSlice";
 import Loader from "../../UI/Loader";
-// import styles from "./AddTechnic.module.scss";
 import ImageChanger from "./ImageChanger";
 import TextEditor from "./TextEditor";
 
@@ -24,8 +23,6 @@ const AddTechnic: React.FC = () => {
   const [shortDescription, setShortDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
   const [characteristic, setCharacteristic] = useState<string>("");
-
-  // const imgFileRef = useRef<HTMLInputElement>(null);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -59,11 +56,6 @@ const AddTechnic: React.FC = () => {
       })
     );
   };
-
-  // const pickHandler = () => {
-  //   if (!imgFileRef.current?.files) return;
-  //   imgFileRef.current.click();
-  // };
 
   return (
     <Paper elevation={3} sx={{ p: "15px" }}>
@@ -110,7 +102,6 @@ const AddTechnic: React.FC = () => {
             title={"Изображение для описания"}
           />
         </div>
-
         <div style={{ marginTop: "20px", padding: "15px" }}>
           <DialogTitle
             style={{

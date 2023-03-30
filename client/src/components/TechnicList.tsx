@@ -1,4 +1,3 @@
-// import { Card } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Sanitize from "../helpers/Sanitize";
@@ -13,7 +12,11 @@ const TechnicList: React.FC = () => {
   if (status === "pending") return <Loader />;
 
   if (!technicList.length)
-    return <div className={styles.technicWrapper}>Список техники пуст</div>;
+    return (
+      <div className={styles.technicWrapper}>
+        <p>Список техники пуст</p>
+      </div>
+    );
 
   return (
     <div className={styles.technicWrapper}>

@@ -59,10 +59,33 @@ const useAdmin = () => {
       CatchFunction(error);
     }
   };
+  const deleteTechnic = async (id: number) => {
+    try {
+      setIsLoading(true);
+      const res = await axios.delete(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/deleteTechnic/${id}`,
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      dispatch(
+        setAlert({
+          severity: "success",
+          message: res.data.message,
+        })
+      );
+      setIsLoading(false);
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
 
   return {
     isLoading,
     addTechnic,
+    deleteTechnic,
   };
 };
 
