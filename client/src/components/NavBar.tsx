@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Sanitize from "../helpers/Sanitize";
 import shortenText from "../helpers/shortenText";
 import { useAuth } from "../hooks/useAuth";
-import { consts } from "../utils/routsConsts";
+import { adminConsts, publicConsts } from "../utils/routsConsts";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const NavBar: React.FC = () => {
               component="div"
               sx={{ flexGrow: 1 }}
               style={{ cursor: "pointer" }}
-              onClick={() => navigate(consts.HOME_ROUTE)}
+              onClick={() => navigate(publicConsts.HOME_ROUTE)}
             >
               Rinaz Technic
             </Box>
@@ -62,7 +62,7 @@ const NavBar: React.FC = () => {
             {!isAuth && (
               <Button
                 color="inherit"
-                onClick={() => navigate(consts.LOGIN_ROUTE)}
+                onClick={() => navigate(publicConsts.LOGIN_ROUTE)}
               >
                 Войти
               </Button>
@@ -71,7 +71,7 @@ const NavBar: React.FC = () => {
             {email === process.env.REACT_APP_ADMINEMAIL && (
               <Button
                 color="inherit"
-                onClick={() => navigate(consts.ADMIN_ROUTE)}
+                onClick={() => navigate(adminConsts.ADD_TECHNIC_ROUTE)}
               >
                 Админ
               </Button>

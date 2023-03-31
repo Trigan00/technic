@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sanitize from "../helpers/Sanitize";
 import { useTypedSelector } from "../store/hooks/useTypedSelector";
 import Loader from "../UI/Loader";
-import { consts } from "../utils/routsConsts";
+import { publicConsts } from "../utils/routsConsts";
 import styles from "./TechnicList.module.scss";
 
 const TechnicList: React.FC = () => {
@@ -24,7 +24,9 @@ const TechnicList: React.FC = () => {
         <div
           key={id}
           className={styles.TechnicCard}
-          onClick={() => navigate(consts.TECHNIC_ROUTE + "/" + id.toString())}
+          onClick={() =>
+            navigate(publicConsts.TECHNIC_ROUTE + "/" + id.toString())
+          }
         >
           <h3>{name}</h3>
           <img

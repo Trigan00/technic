@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       userid: DataTypes.INTEGER,
       technicid: DataTypes.INTEGER,
       date: DataTypes.DATEONLY,
+      status: DataTypes.STRING,
     },
     {
       freezeTableName: true,

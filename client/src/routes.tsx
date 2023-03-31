@@ -1,32 +1,48 @@
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AdminPage from "./pages/AdminPage";
+// import AdminPage from "./pages/admin/AdminPage";
+import { publicConsts, adminConsts } from "./utils/routsConsts";
+import AddTechnicPage from "./pages/admin/AddTechnicPage";
+import TechnicArrayPage from "./pages/admin/TechnicArrayPage";
+import OrderListPage from "./pages/admin/OrderListPage";
 import TechnicPage from "./pages/TechnicPage";
-import { consts } from "./utils/routsConsts";
+import EditTechnicPage from "./pages/admin/EditTechnicPage";
 
 export const adminRoutes = [
   {
-    path: consts.ADMIN_ROUTE,
-    Component: AdminPage,
+    path: adminConsts.ADD_TECHNIC_ROUTE,
+    Component: AddTechnicPage,
+  },
+  {
+    path: adminConsts.TECHNIC_ARRAY_ROUTE,
+    Component: TechnicArrayPage,
+  },
+  {
+    path: adminConsts.ORDERS_ROUTE,
+    Component: OrderListPage,
+  },
+  {
+    path: adminConsts.EDIT_TECHNIC_ROUTE + "/:id",
+    Component: EditTechnicPage,
   },
 ];
 
 export const publicRoutes = [
   {
-    path: consts.HOME_ROUTE,
+    path: publicConsts.HOME_ROUTE,
     Component: HomePage,
   },
   {
-    path: consts.LOGIN_ROUTE,
+    path: publicConsts.LOGIN_ROUTE,
     Component: LoginPage,
   },
   {
-    path: consts.REGISTRATION_ROUTE,
+    path: publicConsts.REGISTRATION_ROUTE,
     Component: RegisterPage,
   },
   {
-    path: consts.TECHNIC_ROUTE + "/:id",
+    path: publicConsts.TECHNIC_ROUTE + "/:id",
     Component: TechnicPage,
   },
 ];

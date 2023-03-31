@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { adminRoutes, publicRoutes } from "../routes";
+import Layout from "./admin/Layout";
 
 const AppRouter: React.FC = () => {
   const { email } = useAuth();
@@ -9,10 +10,13 @@ const AppRouter: React.FC = () => {
   return (
     <>
       <Routes>
-        {email === process.env.REACT_APP_ADMINEMAIL &&
-          adminRoutes.map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component />} />
-          ))}
+        {email === process.env.REACT_APP_ADMINEMAIL && (
+          <Route path="/admin" element={<Layout />}>
+            {adminRoutes.map(({ path, Component }) => {
+              return <Route key={path} path={path} element={<Component />} />;
+            })}
+          </Route>
+        )}
         {publicRoutes.map(({ path, Component }) => (
           <Route key={path} path={path} element={<Component />} />
         ))}

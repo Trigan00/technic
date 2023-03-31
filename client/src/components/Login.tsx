@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "../UI/Form";
 import { useNavigate } from "react-router-dom";
-import { consts } from "../utils/routsConsts";
+import { publicConsts } from "../utils/routsConsts";
 import { useHttp } from "../hooks/useHttp";
 import { useAuth } from "../hooks/useAuth";
 
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
       );
       if (res) {
         login(res);
-        navigate(consts.HOME_ROUTE);
+        navigate(publicConsts.HOME_ROUTE);
       }
     } catch (e) {}
   };

@@ -1,0 +1,65 @@
+.Wrapper {
+  display: flex;
+  .Right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 15px;
+
+    .Price {
+      margin-bottom: 10px;
+      span {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .Buttons {
+    display: flex;
+  }
+
+  ul {
+    height: 170px;
+    overflow: auto;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+      rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+    li {
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        left: 25px;
+        top: 4px;
+        height: 5px;
+        width: 5px;
+        background-color: black;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    flex-direction: column;
+    align-items: center;
+
+    .Right {
+      margin-left: 0;
+      ul {
+        margin-top: 15px;
+        text-align: center;
+        li {
+          position: relative;
+          &::before {
+            left: 27px;
+          }
+        }
+      }
+    }
+
+    .Buttons {
+      margin-top: 15px;
+    }
+  }
+}

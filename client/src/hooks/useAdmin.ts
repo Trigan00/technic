@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useTypedDispatch } from "../store/hooks/useTypedDispatch";
 import { setAlert } from "../store/slices/alertSlice";
+import { fetchTechnic } from "../store/slices/technicSlice";
 import { useAuth } from "./useAuth";
 
 const useAdmin = () => {
@@ -54,6 +55,49 @@ const useAdmin = () => {
           message: res.data.message,
         })
       );
+      dispatch(fetchTechnic());
+      setIsLoading(false);
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
+
+  type updateTechnicProps = {
+    name?: string;
+    fullDescription?: string;
+    shortDescription?: string;
+    characteristic?: string;
+    price?: string;
+    files?: File[];
+  };
+
+  interface IStringIndex extends Record<string, any> {}
+  type MyObject = IStringIndex & updateTechnicProps;
+
+  const updateTechnic = async (id: number, dataToUpdate: MyObject) => {
+    const data = new FormData();
+    for (const key in dataToUpdate) {
+      data.append(key, dataToUpdate[key]);
+    }
+
+    try {
+      setIsLoading(true);
+      const res = await axios.put(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/updateTechnic/${id}`,
+        data,
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      dispatch(
+        setAlert({
+          severity: "success",
+          message: res.data.message,
+        })
+      );
+      dispatch(fetchTechnic());
       setIsLoading(false);
     } catch (error: any) {
       CatchFunction(error);
@@ -76,6 +120,7 @@ const useAdmin = () => {
           message: res.data.message,
         })
       );
+      dispatch(fetchTechnic());
       setIsLoading(false);
     } catch (error: any) {
       CatchFunction(error);
@@ -86,6 +131,7 @@ const useAdmin = () => {
     isLoading,
     addTechnic,
     deleteTechnic,
+    updateTechnic,
   };
 };
 

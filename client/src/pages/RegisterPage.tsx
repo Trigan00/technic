@@ -1,10 +1,12 @@
-import { Card } from "@mui/material";
+import { Card, useTheme } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import SignUp from "../components/SignUp";
-import { consts } from "../utils/routsConsts";
+import { publicConsts } from "../utils/routsConsts";
 
 const RegisterPage: React.FC = () => {
+  const theme = useTheme();
+
   return (
     <Card
       sx={{
@@ -19,8 +21,8 @@ const RegisterPage: React.FC = () => {
       <SignUp />
       <p>
         <Link
-          to={consts.LOGIN_ROUTE}
-          style={{ color: "#1976d2", marginLeft: "10px" }}
+          to={publicConsts.LOGIN_ROUTE}
+          style={{ color: theme.palette.primary.main, marginLeft: "10px" }}
         >
           Войти
         </Link>

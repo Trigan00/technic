@@ -1,6 +1,8 @@
 import { Box, Button, Tab, Tabs, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Calendar from "../components/calendar/Calendar";
+// import Calendar from "../components/calendar/Calendar";
 import Sanitize from "../helpers/Sanitize";
 import { useTypedSelector } from "../store/hooks/useTypedSelector";
 import { TechnicState } from "../store/slices/technicSlice";
@@ -45,7 +47,8 @@ const TechnicPage: React.FC = () => {
   const { technicList, status } = useTypedSelector((state) => state.technic);
   const theme = useTheme();
   const [technicInfo, setTechnicInfo] = useState<TechnicState>();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [isCalendar, setIsCalendar] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -73,7 +76,13 @@ const TechnicPage: React.FC = () => {
             <h1>Аренда {technicInfo.name}</h1>
             <Sanitize html={technicInfo.shortDescription} />
             <div className={styles.Order}>
-              <div>
+              <div
+                style={{
+                  // display: "flex",
+                  // alignItems: "center",
+                  marginTop: "10px",
+                }}
+              >
                 <span
                   className={styles.Price}
                   style={{ color: theme.palette.primary.main }}
@@ -82,7 +91,12 @@ const TechnicPage: React.FC = () => {
                 </span>
                 <span>руб/смена</span>
               </div>
-              <Button variant="contained" size="large" sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ mt: 3 }}
+                onClick={() => setIsCalendar(true)}
+              >
                 Заказать
               </Button>
             </div>
@@ -118,6 +132,7 @@ const TechnicPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <Calendar isModal={isCalendar} setIsModal={setIsCalendar} />
     </div>
   );
 };

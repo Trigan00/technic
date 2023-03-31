@@ -11,17 +11,20 @@ import {
   Paper,
 } from "@mui/material";
 import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import { useTypedSelector } from "../../store/hooks/useTypedSelector";
 import { TechnicState } from "../../store/slices/technicSlice";
 import DeleteModal from "../../UI/DeleteModal";
 import Loader from "../../UI/Loader";
+// import { adminConsts } from "../../utils/routsConsts";
 
-const TechnicArray: React.FC = () => {
+const TechnicArrayPage: React.FC = () => {
   const selector = useTypedSelector((state) => state.technic);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
   const { deleteTechnic } = useAdmin();
+  // const navigate = useNavigate();
 
   const deleteHandler = (id: number) => {
     deleteTechnic(id);
@@ -39,16 +42,17 @@ const TechnicArray: React.FC = () => {
                   key={technic.id}
                   secondaryAction={
                     <div>
-                      <IconButton
+                      {/* <IconButton
                         sx={{ mr: "5px" }}
                         aria-label="edit"
-                        onClick={() => {
-                          // setEditVideoId(video.id);
-                          // setIsEdit(true);
-                        }}
+                        onClick={() =>
+                          navigate(
+                            adminConsts.EDIT_TECHNIC_ROUTE + "/" + technic.id
+                          )
+                        }
                       >
                         <Icon>edit</Icon>
-                      </IconButton>
+                      </IconButton> */}
                       <IconButton
                         edge="end"
                         aria-label="delete"
@@ -88,4 +92,4 @@ const TechnicArray: React.FC = () => {
   );
 };
 
-export default TechnicArray;
+export default TechnicArrayPage;

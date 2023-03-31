@@ -1,49 +1,58 @@
 import { Paper, useTheme } from "@mui/material";
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { adminConsts } from "../../utils/routsConsts";
 import styles from "./AdminNav.module.scss";
 
-interface AdminNavProps {
-  currnetPage: string;
-  setPage: React.Dispatch<React.SetStateAction<string>>;
-  pages: any;
-}
+type arrType = {
+  name: string;
+  route: string;
+};
 
-const AdminNav: React.FC<AdminNavProps> = ({ setPage, pages, currnetPage }) => {
+const arr: arrType[] = [
+  {
+    route: adminConsts.ADD_TECHNIC_ROUTE,
+    name: "Добваить технику",
+  },
+  {
+    route: adminConsts.TECHNIC_ARRAY_ROUTE,
+    name: "Список техники",
+  },
+  {
+    route: adminConsts.ORDERS_ROUTE,
+    name: "Заказы",
+  },
+];
+const AdminNav: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const theme = useTheme();
-  const arr: any = Object.values(pages);
 
   return (
     <Paper elevation={3} className={styles.AdminNav}>
-      {arr.map(
-        (
-          { name, componentName }: { name: string; componentName: string },
-          i: number
-        ) => (
-          <div key={componentName}>
-            <div
-              style={{
-                transition: "0.3s",
-                color:
-                  componentName === currnetPage
-                    ? theme.palette.primary.main
-                    : "",
-              }}
-              onClick={() => setPage(componentName)}
-            >
-              {name}
-            </div>
-            <div
-              style={{
-                transition: "0.3s",
-                borderBottom:
-                  componentName === currnetPage
-                    ? `1px solid ${theme.palette.primary.main}`
-                    : "1px solid gray",
-              }}
-            />
+      {arr.map(({ name, route }: arrType) => (
+        <div key={route}>
+          <div
+            style={{
+              transition: "0.3s",
+              color:
+                route === location.pathname ? theme.palette.primary.main : "",
+            }}
+            onClick={() => navigate(route)}
+          >
+            {name}
           </div>
-        )
-      )}
+          <div
+            style={{
+              transition: "0.3s",
+              borderBottom:
+                route === location.pathname
+                  ? `1px solid ${theme.palette.primary.main}`
+                  : "1px solid gray",
+            }}
+          />
+        </div>
+      ))}
     </Paper>
   );
 };

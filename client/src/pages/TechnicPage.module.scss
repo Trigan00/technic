@@ -34,7 +34,7 @@
 
     p {
       margin: 10px 0;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
 
     .Order {
@@ -58,6 +58,7 @@
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   .RightContent {
     max-width: 250px;
     width: 100%;
