@@ -9,6 +9,7 @@ import { useTypedSelector } from "./store/hooks/useTypedSelector";
 import { useTypedDispatch } from "./store/hooks/useTypedDispatch";
 import { fetchTechnic } from "./store/slices/technicSlice";
 import { orange } from "@mui/material/colors";
+import Footer from "./components/Footer";
 
 const theme = createTheme({
   palette: {
@@ -26,6 +27,7 @@ function App() {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName) || "{}");
+
     if (data && data.token) {
       login(data);
     }
@@ -37,9 +39,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <NavBar />
-        <Container>
+        <Container sx={{ mb: 4 }} className="Main">
           <AppRouter />
         </Container>
+        <Footer />
         <MyAlert
           message={selector.message}
           open={selector.isOpen}

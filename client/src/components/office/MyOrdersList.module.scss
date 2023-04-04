@@ -1,0 +1,7 @@
+.Wrapper {
+  padding: 15px;
+  @media screen and (max-width: 720px) {
+    margin-top: 15px;
+    padding: 15px;
+  }
+}

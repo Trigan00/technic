@@ -2,12 +2,14 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 // import AdminPage from "./pages/admin/AdminPage";
-import { publicConsts, adminConsts } from "./utils/routsConsts";
+import { publicConsts, adminConsts, officeConsts } from "./utils/routsConsts";
 import AddTechnicPage from "./pages/admin/AddTechnicPage";
 import TechnicArrayPage from "./pages/admin/TechnicArrayPage";
 import OrderListPage from "./pages/admin/OrderListPage";
 import TechnicPage from "./pages/TechnicPage";
 import EditTechnicPage from "./pages/admin/EditTechnicPage";
+import CurrentOrdersPage from "./pages/office/CurrentOrdersPage";
+import AllOrdersPage from "./pages/office/AllOrdersPage";
 
 export const adminRoutes = [
   {
@@ -44,5 +46,16 @@ export const publicRoutes = [
   {
     path: publicConsts.TECHNIC_ROUTE + "/:id",
     Component: TechnicPage,
+  },
+];
+
+export const officeRoutes = [
+  {
+    path: officeConsts.CURRENT_ORDERS_ROUTE,
+    Component: CurrentOrdersPage,
+  },
+  {
+    path: officeConsts.ALL_ORDERS_ROUTE,
+    Component: AllOrdersPage,
   },
 ];

@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom";
 import Sanitize from "../helpers/Sanitize";
 import shortenText from "../helpers/shortenText";
 import { useAuth } from "../hooks/useAuth";
-import { adminConsts, publicConsts } from "../utils/routsConsts";
+import { adminConsts, publicConsts, officeConsts } from "../utils/routsConsts";
+import logo from "./logo_full_white.png";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
@@ -34,7 +35,8 @@ const NavBar: React.FC = () => {
               style={{ cursor: "pointer" }}
               onClick={() => navigate(publicConsts.HOME_ROUTE)}
             >
-              Rinaz Technic
+              {/* Rinaz Technic */}
+              <img width="96px" height="40px" src={logo} alt="rinaz_logo" />
             </Box>
 
             {isAuth && (
@@ -58,6 +60,13 @@ const NavBar: React.FC = () => {
                 </Box>
               </Tooltip>
             )}
+
+            <Button
+              color="inherit"
+              onClick={() => navigate(officeConsts.CURRENT_ORDERS_ROUTE)}
+            >
+              Кабинет
+            </Button>
 
             {!isAuth && (
               <Button

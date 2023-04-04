@@ -3,10 +3,15 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "../store/slices/alertSlice";
 import { useHttp } from "../hooks/useHttp";
 import Form from "../UI/Form";
+import { useNavigate } from "react-router-dom";
+import { publicConsts } from "../utils/routsConsts";
+import { useAuth } from "../hooks/useAuth";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const { request, loading, error } = useHttp();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const registerHandler = async (
     email: string,
@@ -30,7 +35,8 @@ const SignUp: React.FC = () => {
             message: res.message,
           })
         );
-        // navigate(consts.HOME_ROUTE);
+        login(res.user);
+        navigate(publicConsts.HOME_ROUTE);
       }
     } catch (e) {}
   };

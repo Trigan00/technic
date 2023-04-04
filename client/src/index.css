@@ -36,6 +36,11 @@ html {
 }
 
 body {
+  min-height: 100%;
   font-family: "Roboto";
   background-color: #f0f4f7;
+}
+
+.Main {
+  min-height: calc(100vh - 150px - 64px);
 }

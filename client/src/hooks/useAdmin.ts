@@ -127,11 +127,80 @@ const useAdmin = () => {
     }
   };
 
+  const getOrders = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/getOrders`,
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      setIsLoading(false);
+      return res.data.orders;
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
+
+  const deleteOrder = async (id: number) => {
+    try {
+      setIsLoading(true);
+      const res = await axios.delete(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/deleteOrder/${id}`,
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      dispatch(
+        setAlert({
+          severity: "success",
+          message: res.data.message,
+        })
+      );
+      setIsLoading(false);
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
+
+  const updateStatus = async (id: number, status: string) => {
+    try {
+      setIsLoading(true);
+      const res = await axios.put(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/updateStatus/${id}`,
+        { status },
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      dispatch(
+        setAlert({
+          severity: "success",
+          message: res.data.message,
+        })
+      );
+      dispatch(fetchTechnic());
+      setIsLoading(false);
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
+
   return {
     isLoading,
     addTechnic,
     deleteTechnic,
     updateTechnic,
+    getOrders,
+    deleteOrder,
+    updateStatus,
   };
 };
 

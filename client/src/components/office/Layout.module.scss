@@ -1,7 +1,6 @@
 .Wrapper {
   margin-top: 15px;
   display: flex;
-
   @media screen and (max-width: 720px) {
     flex-direction: column;
     align-items: center;

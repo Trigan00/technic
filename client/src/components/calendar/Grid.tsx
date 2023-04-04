@@ -8,18 +8,15 @@ interface GridProps {
   today: moment.Moment;
   datesList: string[];
   setDatesList: React.Dispatch<React.SetStateAction<string[]>>;
+  busyDays: string[];
 }
-
-const busyDays = {
-  "12.03.2023": "",
-  "14.03.2023": "",
-};
 
 const Grid: React.FC<GridProps> = ({
   startDay,
   today,
   datesList,
   setDatesList,
+  busyDays,
 }) => {
   const day = startDay.clone().subtract(1, "day");
   const daysArr = [...Array(42)].map(() => day.add(1, "day").clone());
@@ -27,10 +24,10 @@ const Grid: React.FC<GridProps> = ({
   const color = theme.palette.primary.main;
 
   const pickDate = (date: string) => {
-    if (date in busyDays) return;
+    if (busyDays.includes(date)) return;
     if (datesList.includes(date))
       return setDatesList((prev) => prev.filter((el) => el !== date));
-    setDatesList((prev) => [...prev, date]);
+    setDatesList((prev: any) => [...prev, date]);
   };
 
   return (
@@ -58,12 +55,11 @@ const Grid: React.FC<GridProps> = ({
                 dayItem.day() === 6 || dayItem.day() === 0 ? "#ECECEC" : "",
               borderRight: dayItem.day() === 0 ? "none" : "1px solid " + color,
               color: today.isSame(dayItem, "month") ? "black" : "lightgrey",
-              boxShadow:
-                dayItem.format("DD.MM.YYYY") in busyDays
-                  ? "inset 3px 4px 5px red"
-                  : datesList.includes(dayItem.format("DD.MM.YYYY"))
-                  ? "inset 3px 4px 5px green"
-                  : "none",
+              boxShadow: busyDays.includes(dayItem.format("DD.MM.YYYY"))
+                ? "inset 1px 4px 20px red"
+                : datesList.includes(dayItem.format("DD.MM.YYYY"))
+                ? "inset 1px 4px 20px green"
+                : "none",
             }}
             onClick={() => {
               pickDate(dayItem.format("DD.MM.YYYY"));

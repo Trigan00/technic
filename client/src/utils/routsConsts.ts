@@ -10,3 +10,7 @@ export const adminConsts = {
   ORDERS_ROUTE: "/admin/orders",
   EDIT_TECHNIC_ROUTE: "/admin/editTechnic",
 };
+export const officeConsts = {
+  CURRENT_ORDERS_ROUTE: "/office/currentOrders",
+  ALL_ORDERS_ROUTE: "/office/allOrders",
+};

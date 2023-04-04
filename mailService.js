@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailer = (to, link) => {
+const activationMailer = (to, link) => {
   transporter.sendMail(
     {
       from: "RinazTechnic <mytest_90@mail.ru>",
@@ -36,4 +36,30 @@ const mailer = (to, link) => {
   );
 };
 
-module.exports = mailer;
+const orderMailer = (email, username, technicname) => {
+  transporter.sendMail(
+    {
+      from: "RinazTechnic <mytest_90@mail.ru>",
+      to: process.env.AMDIN_EMAIL,
+      subject: "Новый заказ " + process.env.API_URL,
+      text: "",
+      html: `
+              <div>
+                  <h1>Заказ от пользователя ${email} (${username})</h1>
+                  <p>Заказ техники "${technicname}"</p>
+                  <a href="${process.env.CLIENT_URL}/admin/orders">Подробнее</a>
+                  </div>
+          `,
+    },
+    (error, info) => {
+      if (error) {
+        console.log("Something went wrong", error);
+      }
+      if (info) {
+        console.log("Order mail send successfully");
+      }
+    }
+  );
+};
+
+module.exports = { activationMailer, orderMailer };

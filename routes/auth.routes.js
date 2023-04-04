@@ -3,13 +3,22 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const { body, validationResult } = require("express-validator");
-const mailService = require("../mailService");
+const { activationMailer } = require("../mailService");
 const router = new Router();
+const authMiddleware = require("../middleware/auth.middleware");
 require("dotenv").config();
 
 const {
   models: { Person },
 } = require("../models");
+
+const generateToken = (id) => {
+  // return jwt.sign({ userId: id }, process.env.jwtSecret); // without expire
+  // if time has passed, you must also check when you first visit the page whether the time has expired
+  return jwt.sign({ userId: id }, process.env.jwtSecret, {
+    expiresIn: "24h",
+  });
+};
 
 // /api/auth/register
 router.post(
@@ -47,14 +56,14 @@ router.post(
       const activationLink = uuid.v4();
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      await Person.create({
+      const user = await Person.create({
         email,
         password: hashedPassword,
         username,
         activationLink,
       });
 
-      mailService(
+      activationMailer(
         email,
         `${process.env.API_URL}/api/auth/activate/${activationLink}`
       );
@@ -62,6 +71,13 @@ router.post(
       return res.status(201).json({
         status: "success",
         message: "User added. Confirm your email address",
+        user: {
+          email: user.dataValues.email,
+          id: user.dataValues.id,
+          username: user.dataValues.username,
+          isVerified: user.dataValues.isVerified,
+          token: generateToken(user.dataValues.id),
+        },
       });
     } catch (error) {
       console.log(error);
@@ -118,13 +134,8 @@ router.post(
         });
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.jwtSecret); // without expire
-      // if time has passed, you must also check when you first visit the page whether the time has expired
-      // const token = jwt.sign({ userId: user.id }, process.env.jwtSecret, {
-      //   expiresIn: "1h",
-      // });
       res.json({
-        token,
+        token: generateToken(user.id),
         id: user.id,
         email: user.email,
         isVerified: user.isVerified,
@@ -154,6 +165,27 @@ router.get("/activate/:link", async (req, res) => {
     );
 
     return res.redirect(process.env.CLIENT_URL);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failure",
+      message: "Something went wrong, try again",
+    });
+  }
+});
+
+router.get("/validateToken", authMiddleware.decodeToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const users = await Person.findAll({
+      where: {
+        id: userId,
+      },
+    });
+    const user = users[0].dataValues;
+    res.json({
+      isVerified: user.isVerified,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

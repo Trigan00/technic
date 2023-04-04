@@ -124,7 +124,12 @@ const TechnicPage: React.FC = () => {
           </TabPanel>
         </Box>
         <div className={styles.RightContent}>
-          <img src="/dostavka.svg" alt="delivery" />
+          <img
+            src="/dostavka.svg"
+            width="120px"
+            height="100px"
+            alt="delivery"
+          />
           <h3>Доставка тралом</h3>
           <div>
             <span> В пределах Казани</span>
@@ -132,7 +137,13 @@ const TechnicPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <Calendar isModal={isCalendar} setIsModal={setIsCalendar} />
+      <Calendar
+        isModal={isCalendar}
+        setIsModal={setIsCalendar}
+        technicId={technicInfo.id}
+        technicPrice={technicInfo.price}
+        technicname={technicInfo.name}
+      />
     </div>
   );
 };

@@ -1,8 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const authRouter = require("./routes/auth.routes");
-const adminRouter = require("./routes/admin.routes");
-const technicRouter = require("./routes/technic.routes");
+const {
+  adminRouter,
+  technicRouter,
+  authRouter,
+  userRouter,
+} = require("./routes");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 require("dotenv").config();
@@ -46,6 +49,7 @@ app.use("/api/auth", limiter);
 app.use("/api/auth", authRouter);
 app.use("/api/technic", technicRouter);
 app.use("/api/admin", authMiddleware.isAdmin, adminRouter);
+app.use("/api/user", authMiddleware.decodeToken, userRouter);
 
 (async () => {
   await db.sequelize.sync();

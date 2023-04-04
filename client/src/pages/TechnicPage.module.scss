@@ -5,7 +5,7 @@
 .shortDescriptionContainer {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
 
   .Image {
     max-width: 420px;
@@ -52,13 +52,20 @@
       }
     }
   }
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    .shortDescription {
+      margin-top: 15px;
+    }
+  }
 }
 
 .MainContentWrapper {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   .RightContent {
     max-width: 250px;
     width: 100%;
@@ -81,6 +88,14 @@
       margin-top: 10px;
       display: flex;
       justify-content: space-between;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    .RightContent {
+      margin: 15px;
     }
   }
 }

@@ -1,0 +1,46 @@
+.Wrapper {
+  padding: 15px;
+  @media screen and (max-width: 800px) {
+    padding: 10px;
+  }
+}
+
+.Order {
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  .Top {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media screen and (max-width: 800px) {
+      button {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  .userEmail {
+    font-size: 0.9rem;
+    font-weight: bold;
+    @media screen and (max-width: 800px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .TechnicName {
+    margin-top: 5px;
+    @media screen and (max-width: 800px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  .Bottom {
+    border-top: 1px solid lightgray;
+    padding: 5px;
+    font-size: 0.83rem;
+  }
+}

@@ -57,11 +57,11 @@ const TechnicArrayPage: React.FC = () => {
                         edge="end"
                         aria-label="delete"
                         onClick={() => {
-                          setIsModal(true);
                           setModalInfo({
                             name: technic.name,
                             id: technic.id,
                           });
+                          setIsModal(true);
                         }}
                       >
                         <Icon>delete</Icon>
@@ -85,8 +85,9 @@ const TechnicArrayPage: React.FC = () => {
         isModal={isModal}
         setIsModal={setIsModal}
         technicName={modalInfo.name}
-        technicId={modalInfo.id}
+        id={modalInfo.id}
         onDelete={deleteHandler}
+        isOrder={false}
       />
     </>
   );

@@ -25,16 +25,18 @@ interface DeleteModalProps {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   technicName: string;
-  technicId: number;
+  id: number;
   onDelete: (id: number) => void;
+  isOrder: boolean;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
   isModal,
   setIsModal,
   technicName,
-  technicId,
+  id,
   onDelete,
+  isOrder,
 }) => {
   const [deleteIsActive, setDeleteIsActive] = useState(false);
   return (
@@ -53,7 +55,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         <Box sx={style}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Удалить технику?
+              Удалить {isOrder ? "заказ" : "технику"}?
             </Typography>
             <Icon
               style={{ cursor: "pointer" }}
@@ -63,8 +65,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             </Icon>
           </div>
           <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-            Техника &#171;{technicName}&#187; будет удалена без возможности
-            восстановления
+            {isOrder ? "Заказ" : "Техника"} &#171;{technicName}&#187; будет
+            {isOrder ? " удален" : " удалена"} без возможности восстановления
           </Typography>
           <Typography sx={{ mt: 2 }}>
             <FormControlLabel
@@ -75,7 +77,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
                   inputProps={{ "aria-label": "controlled" }}
                 />
               }
-              label="Удалить технику"
+              label={`Удалить ${isOrder ? "заказ" : "технику"}`}
             />
           </Typography>
           <div style={{ marginTop: "20px", float: "right" }}>
@@ -92,7 +94,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               color="error"
               disabled={!deleteIsActive}
               onClick={() => {
-                onDelete(technicId);
+                onDelete(id);
+                setDeleteIsActive(false);
                 setIsModal(false);
               }}
             >

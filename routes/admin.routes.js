@@ -5,7 +5,7 @@ const { unlink } = require("node:fs/promises");
 const path = require("path");
 
 const {
-  models: { Technic },
+  models: { Technic, Allorders },
 } = require("../models");
 
 const router = new Router();
@@ -111,6 +111,74 @@ router.put("/updateTechnic/:id", upload.array("files"), async (req, res) => {
     return res.status(201).json({
       status: "success",
       message: "Данные техники успешно обновлены.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failure",
+      message: "Something went wrong, try again",
+    });
+  }
+});
+
+router.get("/getOrders", async (req, res) => {
+  try {
+    const orders = await Allorders.findAll();
+
+    const formattedArr = orders.map(({ dataValues }) => dataValues);
+
+    return res.status(200).json({
+      status: "success",
+      orders: formattedArr,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failure",
+      message: "Something went wrong, try again",
+    });
+  }
+});
+
+router.delete("/deleteOrder/:id", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    await Allorders.destroy({
+      where: {
+        id: orderId,
+      },
+    });
+
+    return res
+      .status(201)
+      .json({ status: "success", message: "Заказ успешно удалена." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failure",
+      message: "Something went wrong, try again",
+    });
+  }
+});
+
+router.put("/updateStatus/:id", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    await Allorders.update(
+      { status },
+      {
+        where: {
+          id: orderId,
+        },
+      }
+    );
+
+    return res.status(201).json({
+      status: "success",
+      message: "Статус заказа успешно обновлен.",
     });
   } catch (error) {
     console.log(error);
