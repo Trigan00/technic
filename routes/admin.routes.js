@@ -31,12 +31,19 @@ router.post("/addTechnic", upload.array("files"), async (req, res) => {
   try {
     const {
       files,
-      body: { name, fullDescription, shortDescription, characteristic, price },
+      body: {
+        name,
+        type,
+        fullDescription,
+        shortDescription,
+        characteristic,
+        price,
+      },
     } = req;
 
-    console.log(files);
     await Technic.create({
       name,
+      type,
       fullDescription,
       shortDescription,
       characteristic,
@@ -95,31 +102,34 @@ router.delete("/deleteTechnic/:id", async (req, res) => {
   }
 });
 
-router.put("/updateTechnic/:id", upload.array("files"), async (req, res) => {
-  try {
-    const technicId = req.params.id;
+router.put(
+  "/updateTechnic/:id",
+  /* upload.array("files"), */ async (req, res) => {
+    try {
+      const technicId = req.params.id;
 
-    await Technic.update(
-      { ...req.body },
-      {
-        where: {
-          id: technicId,
-        },
-      }
-    );
+      await Technic.update(
+        { ...req.body },
+        {
+          where: {
+            id: +technicId,
+          },
+        }
+      );
 
-    return res.status(201).json({
-      status: "success",
-      message: "Данные техники успешно обновлены.",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      status: "failure",
-      message: "Something went wrong, try again",
-    });
+      return res.status(201).json({
+        status: "success",
+        message: "Данные техники успешно обновлены.",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failure",
+        message: "Something went wrong, try again",
+      });
+    }
   }
-});
+);
 
 router.get("/getOrders", async (req, res) => {
   try {

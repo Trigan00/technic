@@ -1,8 +1,14 @@
 import {
+  Box,
   Button,
   DialogTitle,
+  FormControl,
   FormGroup,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -11,31 +17,49 @@ import useAdmin from "../../hooks/useAdmin";
 import { useTypedSelector } from "../../store/hooks/useTypedSelector";
 import { TechnicState } from "../../store/slices/technicSlice";
 import Loader from "../../UI/Loader";
+import TextEditor from "../../components/admin/TextEditor";
+import { technicsTypes } from "../../utils/technicsTypes";
 
 const EditTechnicPage: React.FC = () => {
   const { id } = useParams();
   const { technicList, status } = useTypedSelector((state) => state.technic);
   const { updateTechnic } = useAdmin();
-  const [technicInfo, setTechnicInfo] = useState<TechnicState>();
+  const [name, setName] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
+  const [fullDescription, setFullDescription] = useState<string>("");
+  const [characteristic, setCharacteristic] = useState<string>("");
+  const [type, setType] = useState<string>("");
 
   useEffect(() => {
     const index = technicList.findIndex(
       (el: TechnicState) => el.id.toString() === id
     );
-    setTechnicInfo(technicList[index]);
+    const technic = technicList[index];
+    setName(technic.name);
+    setPrice("" + technic.price);
+    setShortDescription(technic.shortDescription);
+    setFullDescription(technic.fullDescription);
+    setCharacteristic(technic.characteristic);
+    setType("" + technicsTypes.indexOf(technic.type));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const clickHandler = () => {
     if (!id) return;
-    updateTechnic(+id, { name: "hope", price: "1000" });
+    updateTechnic(+id, {
+      name,
+      characteristic,
+      fullDescription,
+      price,
+      shortDescription,
+      type: technicsTypes[+type],
+    });
   };
-  if (!technicInfo) return <Loader />;
+  if (status === "pending") return <Loader />;
   return (
     <>
-      <DialogTitle style={{ textAlign: "center" }}>
-        {technicInfo.name}
-      </DialogTitle>
+      <DialogTitle style={{ textAlign: "center" }}>{name}</DialogTitle>
       <Paper elevation={3} sx={{ p: "15px" }}>
         <FormGroup>
           <TextField
@@ -47,11 +71,9 @@ const EditTechnicPage: React.FC = () => {
             sx={{
               w: "100%",
             }}
-            value={technicInfo.name}
+            value={name}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTechnicInfo((prev: any) => {
-                return { ...prev, name: e.target.value };
-              })
+              setName(e.target.value)
             }
           />
           <TextField
@@ -61,17 +83,71 @@ const EditTechnicPage: React.FC = () => {
             type="number"
             size="small"
             margin="normal"
-            value={technicInfo.price}
+            value={price}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTechnicInfo((prev: any) => {
-                return { ...prev, price: e.target.value };
-              })
+              setPrice(e.target.value)
             }
           />
+          <Box sx={{ mb: 3 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Тип</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={type}
+                label="Тип"
+                onChange={(event: SelectChangeEvent) =>
+                  setType(event.target.value as string)
+                }
+                sx={{ mt: 1, height: "40px" }}
+              >
+                {technicsTypes.map((type, i) => (
+                  <MenuItem key={type} value={i}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <div style={{ marginTop: "20px", padding: "15px" }}>
+            <DialogTitle
+              style={{
+                textAlign: "center",
+                margin: "0 0 5px 0",
+              }}
+            >
+              Краткое описание
+            </DialogTitle>
+            <TextEditor text={shortDescription} setText={setShortDescription} />
+          </div>
+          <div style={{ marginTop: "20px", padding: "15px" }}>
+            <DialogTitle
+              style={{
+                textAlign: "center",
+                margin: "0 0 5px 0",
+              }}
+            >
+              Полное описание
+            </DialogTitle>
+            <TextEditor text={fullDescription} setText={setFullDescription} />
+          </div>
+          <div style={{ marginTop: "20px", padding: "15px" }}>
+            <DialogTitle
+              style={{
+                textAlign: "center",
+                margin: "0 0 5px 0",
+              }}
+            >
+              Характеристика
+            </DialogTitle>
+            <TextEditor text={characteristic} setText={setCharacteristic} />
+          </div>
         </FormGroup>
-        <Button variant="contained" onClick={clickHandler}>
-          Сохранить
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button variant="contained" onClick={clickHandler} size="large">
+            Сохранить
+          </Button>
+        </Box>
       </Paper>
     </>
   );

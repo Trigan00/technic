@@ -28,10 +28,12 @@ const useAdmin = () => {
     fullDescription: string,
     shortDescription: string,
     characteristic: string,
-    price: string
+    price: string,
+    type: string
   ) => {
     const data = new FormData();
     data.append("name", name);
+    data.append("type", type);
     data.append("fullDescription", fullDescription);
     data.append("shortDescription", shortDescription);
     data.append("characteristic", characteristic);
@@ -62,29 +64,41 @@ const useAdmin = () => {
     }
   };
 
-  type updateTechnicProps = {
-    name?: string;
-    fullDescription?: string;
-    shortDescription?: string;
-    characteristic?: string;
-    price?: string;
-    files?: File[];
+  // type updateTechnicProps = {
+  //   name?: string;
+  //   fullDescription?: string;
+  //   shortDescription?: string;
+  //   characteristic?: string;
+  //   price?: string;
+  //   files?: File[];
+  // };
+
+  // interface IStringIndex extends Record<string, any> {}
+  // type MyObject = IStringIndex & updateTechnicProps;
+
+  type updateProps = {
+    name: string;
+    fullDescription: string;
+    shortDescription: string;
+    characteristic: string;
+    price: string;
+    type: string;
   };
 
-  interface IStringIndex extends Record<string, any> {}
-  type MyObject = IStringIndex & updateTechnicProps;
-
-  const updateTechnic = async (id: number, dataToUpdate: MyObject) => {
-    const data = new FormData();
-    for (const key in dataToUpdate) {
-      data.append(key, dataToUpdate[key]);
-    }
+  const updateTechnic = async (
+    /* id: number, dataToUpdate: MyObject */ id: number,
+    data: updateProps
+  ) => {
+    // const data = new FormData();
+    // for (const key in dataToUpdate) {
+    //   data.append(key, dataToUpdate[key]);
+    // }
 
     try {
       setIsLoading(true);
       const res = await axios.put(
         `${process.env.REACT_APP_SERVERURL}/api/admin/updateTechnic/${id}`,
-        data,
+        { ...data, price: +data.price },
         {
           headers: {
             authorization: "Bearer " + token,

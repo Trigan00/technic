@@ -1,8 +1,13 @@
 import {
+  Box,
   Button,
   DialogTitle,
-  FormGroup,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -12,6 +17,7 @@ import useAdmin from "../../hooks/useAdmin";
 import { useTypedDispatch } from "../../store/hooks/useTypedDispatch";
 import { setAlert } from "../../store/slices/alertSlice";
 import Loader from "../../UI/Loader";
+import { technicsTypes } from "../../utils/technicsTypes";
 
 const AddTechnicPage: React.FC = () => {
   const { addTechnic, isLoading } = useAdmin();
@@ -23,6 +29,7 @@ const AddTechnicPage: React.FC = () => {
   const [shortDescription, setShortDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
   const [characteristic, setCharacteristic] = useState<string>("");
+  const [type, setType] = useState<string>("");
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -38,7 +45,13 @@ const AddTechnicPage: React.FC = () => {
   };
 
   const uploadHandler = async () => {
-    if (imgFile && price.trim() && name.trim() && imgFileDescription) {
+    if (
+      imgFile &&
+      price.trim() &&
+      name.trim() &&
+      imgFileDescription &&
+      technicsTypes[+type]
+    ) {
       return addTechnic(
         imgFile,
         imgFileDescription,
@@ -46,7 +59,8 @@ const AddTechnicPage: React.FC = () => {
         fullDescription,
         shortDescription,
         characteristic,
-        price
+        price,
+        technicsTypes[+type]
       );
     }
     dispatch(
@@ -64,93 +78,116 @@ const AddTechnicPage: React.FC = () => {
       </DialogTitle>
 
       <Paper elevation={3} sx={{ p: "15px" }}>
-        <FormGroup>
-          <TextField
-            id="outlined-basic"
-            label="название"
-            variant="outlined"
-            type="text"
-            size="small"
-            value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
-            }
+        <TextField
+          id="outlined-basic"
+          label="название"
+          variant="outlined"
+          type="text"
+          size="small"
+          fullWidth
+          value={name}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
+        />
+        <TextField
+          id="price"
+          label="цена"
+          variant="outlined"
+          type="number"
+          size="small"
+          margin="normal"
+          fullWidth
+          value={price}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPrice(e.target.value)
+          }
+        />
+
+        <Box sx={{ mb: 3 }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Тип</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={type}
+              label="Тип"
+              onChange={(event: SelectChangeEvent) =>
+                setType(event.target.value as string)
+              }
+              sx={{ mt: 1, height: "40px" }}
+            >
+              {technicsTypes.map((type, i) => (
+                <MenuItem key={type} value={i}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <ImageChanger
+            imgFile={imgFile}
+            changeHandler={changeHandler}
+            width={225}
+            height={120}
+            title={"Изображение для карточки"}
           />
-          <TextField
-            id="price"
-            label="цена"
-            variant="outlined"
-            type="number"
-            size="small"
-            margin="normal"
-            value={price}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPrice(e.target.value)
-            }
+          <ImageChanger
+            imgFile={imgFileDescription}
+            changeHandler={changeHandler}
+            width={420}
+            height={420}
+            title={"Изображение для описания"}
           />
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <ImageChanger
-              imgFile={imgFile}
-              changeHandler={changeHandler}
-              width={225}
-              height={120}
-              title={"Изображение для карточки"}
-            />
-            <ImageChanger
-              imgFile={imgFileDescription}
-              changeHandler={changeHandler}
-              width={420}
-              height={420}
-              title={"Изображение для описания"}
-            />
-          </div>
-          <div style={{ marginTop: "20px", padding: "15px" }}>
-            <DialogTitle
-              style={{
-                textAlign: "center",
-                margin: "0 0 5px 0",
-              }}
+        </div>
+        <div style={{ marginTop: "20px", padding: "15px" }}>
+          <DialogTitle
+            style={{
+              textAlign: "center",
+              margin: "0 0 5px 0",
+            }}
+          >
+            Краткое описание
+          </DialogTitle>
+          <TextEditor text={shortDescription} setText={setShortDescription} />
+        </div>
+        <div style={{ marginTop: "20px", padding: "15px" }}>
+          <DialogTitle
+            style={{
+              textAlign: "center",
+              margin: "0 0 5px 0",
+            }}
+          >
+            Полное описание
+          </DialogTitle>
+          <TextEditor text={fullDescription} setText={setFullDescription} />
+        </div>
+        <div style={{ marginTop: "20px", padding: "15px" }}>
+          <DialogTitle
+            style={{
+              textAlign: "center",
+              margin: "0 0 5px 0",
+            }}
+          >
+            Характеристика
+          </DialogTitle>
+          <TextEditor text={characteristic} setText={setCharacteristic} />
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          {!isLoading ? (
+            <Button
+              variant="contained"
+              style={{ width: "100%" }}
+              onClick={uploadHandler}
             >
-              Краткое описание
-            </DialogTitle>
-            <TextEditor text={shortDescription} setText={setShortDescription} />
-          </div>
-          <div style={{ marginTop: "20px", padding: "15px" }}>
-            <DialogTitle
-              style={{
-                textAlign: "center",
-                margin: "0 0 5px 0",
-              }}
-            >
-              Полное описание
-            </DialogTitle>
-            <TextEditor text={fullDescription} setText={setFullDescription} />
-          </div>
-          <div style={{ marginTop: "20px", padding: "15px" }}>
-            <DialogTitle
-              style={{
-                textAlign: "center",
-                margin: "0 0 5px 0",
-              }}
-            >
-              Характеристика
-            </DialogTitle>
-            <TextEditor text={characteristic} setText={setCharacteristic} />
-          </div>
-          <div style={{ marginTop: "10px" }}>
-            {!isLoading ? (
-              <Button
-                variant="contained"
-                style={{ width: "100%" }}
-                onClick={uploadHandler}
-              >
-                Добавить
-              </Button>
-            ) : (
-              <Loader />
-            )}
-          </div>
-        </FormGroup>
+              Добавить
+            </Button>
+          ) : (
+            <Loader />
+          )}
+        </div>
       </Paper>
     </>
   );

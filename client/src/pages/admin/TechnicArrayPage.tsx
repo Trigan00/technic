@@ -11,20 +11,20 @@ import {
   Paper,
 } from "@mui/material";
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import { useTypedSelector } from "../../store/hooks/useTypedSelector";
 import { TechnicState } from "../../store/slices/technicSlice";
 import DeleteModal from "../../UI/DeleteModal";
 import Loader from "../../UI/Loader";
-// import { adminConsts } from "../../utils/routsConsts";
+import { adminConsts } from "../../utils/routsConsts";
 
 const TechnicArrayPage: React.FC = () => {
   const selector = useTypedSelector((state) => state.technic);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
   const { deleteTechnic } = useAdmin();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const deleteHandler = (id: number) => {
     deleteTechnic(id);
@@ -42,7 +42,7 @@ const TechnicArrayPage: React.FC = () => {
                   key={technic.id}
                   secondaryAction={
                     <div>
-                      {/* <IconButton
+                      <IconButton
                         sx={{ mr: "5px" }}
                         aria-label="edit"
                         onClick={() =>
@@ -52,7 +52,7 @@ const TechnicArrayPage: React.FC = () => {
                         }
                       >
                         <Icon>edit</Icon>
-                      </IconButton> */}
+                      </IconButton>
                       <IconButton
                         edge="end"
                         aria-label="delete"

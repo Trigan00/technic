@@ -3,6 +3,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 export interface TechnicState {
   id: number;
   name: string;
+  type: string;
   fullDescription: string;
   shortDescription: string;
   characteristic: string;
