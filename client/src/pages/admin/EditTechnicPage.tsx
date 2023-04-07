@@ -19,11 +19,15 @@ import { TechnicState } from "../../store/slices/technicSlice";
 import Loader from "../../UI/Loader";
 import TextEditor from "../../components/admin/TextEditor";
 import { technicsTypes } from "../../utils/technicsTypes";
+// import EditImage from "../../components/admin/EditImage";
+import ImageChanger from "../../components/admin/ImageChanger";
 
 const EditTechnicPage: React.FC = () => {
   const { id } = useParams();
   const { technicList, status } = useTypedSelector((state) => state.technic);
-  const { updateTechnic } = useAdmin();
+  const { updateTechnic, updateImage, isLoading } = useAdmin();
+  const [defaultValue, setDefaultValue] = useState<TechnicState>();
+
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [shortDescription, setShortDescription] = useState<string>("");
@@ -31,11 +35,15 @@ const EditTechnicPage: React.FC = () => {
   const [characteristic, setCharacteristic] = useState<string>("");
   const [type, setType] = useState<string>("");
 
+  const [imgFile, setImgFile] = useState<File>();
+  const [imgFileDescription, setImgFileDescription] = useState<File>();
+
   useEffect(() => {
     const index = technicList.findIndex(
       (el: TechnicState) => el.id.toString() === id
     );
     const technic = technicList[index];
+    setDefaultValue(technic);
     setName(technic.name);
     setPrice("" + technic.price);
     setShortDescription(technic.shortDescription);
@@ -44,6 +52,39 @@ const EditTechnicPage: React.FC = () => {
     setType("" + technicsTypes.indexOf(technic.type));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+    const name = event.target.name;
+    switch (name) {
+      case "Изображение для карточки":
+        setImgFile(event.target.files[0]);
+        break;
+      case "Изображение для описания":
+        setImgFileDescription(event.target.files[0]);
+        break;
+    }
+  };
+
+  const imageSaveHandler = async (type: "imgname" | "imgFileDescription") => {
+    if (!defaultValue) return;
+    if (type === "imgname") {
+      if (!imgFile) return;
+      await updateImage({
+        technicId: defaultValue.id,
+        type,
+        imgFile: imgFile,
+      });
+    }
+    if (type === "imgFileDescription") {
+      if (!imgFileDescription) return;
+      await updateImage({
+        technicId: defaultValue.id,
+        type,
+        imgFile: imgFileDescription,
+      });
+    }
+  };
 
   const clickHandler = () => {
     if (!id) return;
@@ -56,6 +97,17 @@ const EditTechnicPage: React.FC = () => {
       type: technicsTypes[+type],
     });
   };
+
+  const resetHandler = () => {
+    if (!defaultValue) return;
+    setName(defaultValue.name);
+    setPrice("" + defaultValue.price);
+    setShortDescription(defaultValue.shortDescription);
+    setFullDescription(defaultValue.fullDescription);
+    setCharacteristic(defaultValue.characteristic);
+    setType("" + technicsTypes.indexOf(defaultValue.type));
+  };
+
   if (status === "pending") return <Loader />;
   return (
     <>
@@ -144,11 +196,74 @@ const EditTechnicPage: React.FC = () => {
           </div>
         </FormGroup>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="contained" onClick={clickHandler} size="large">
-            Сохранить
-          </Button>
+          {!isLoading ? (
+            <>
+              <Button variant="contained" onClick={clickHandler} size="large">
+                Сохранить
+              </Button>
+              <Button onClick={resetHandler}>Отменить</Button>
+            </>
+          ) : (
+            <Loader />
+          )}
         </Box>
       </Paper>
+      {defaultValue && (
+        <Paper
+          elevation={3}
+          sx={{
+            mt: 3,
+            p: "15px",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
+          <div>
+            <ImageChanger
+              imgFile={imgFile}
+              changeHandler={changeHandler}
+              width={225}
+              height={120}
+              title={"Изображение для карточки"}
+              url={`${process.env.REACT_APP_SERVERURL}/${defaultValue.imgname}`}
+            />
+            {!isLoading ? (
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 2 }}
+                onClick={() => imageSaveHandler("imgname")}
+              >
+                Сохранить
+              </Button>
+            ) : (
+              <Loader />
+            )}
+          </div>
+          <div>
+            <ImageChanger
+              imgFile={imgFileDescription}
+              changeHandler={changeHandler}
+              width={420}
+              height={420}
+              title={"Изображение для описания"}
+              url={`${process.env.REACT_APP_SERVERURL}/${defaultValue.imgFileDescription}`}
+            />
+            {!isLoading ? (
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 2 }}
+                onClick={() => imageSaveHandler("imgFileDescription")}
+              >
+                Сохранить
+              </Button>
+            ) : (
+              <Loader />
+            )}
+          </div>
+        </Paper>
+      )}
     </>
   );
 };

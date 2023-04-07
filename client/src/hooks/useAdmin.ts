@@ -38,6 +38,7 @@ const useAdmin = () => {
     data.append("shortDescription", shortDescription);
     data.append("characteristic", characteristic);
     data.append("price", price);
+    data.append("timestamp", "" + Date.now());
     data.append("files", imgFile);
     data.append("files", imgFileDescription);
     try {
@@ -117,6 +118,41 @@ const useAdmin = () => {
       CatchFunction(error);
     }
   };
+
+  const updateImage = async (imgData: {
+    technicId: number;
+    type: "imgname" | "imgFileDescription";
+    imgFile: File;
+  }) => {
+    const data = new FormData();
+    data.append("technicId", "" + imgData.technicId);
+    data.append("type", imgData.type);
+    data.append("timestamp", "" + Date.now());
+    data.append("file", imgData.imgFile);
+    try {
+      setIsLoading(true);
+      const res = await axios.put(
+        `${process.env.REACT_APP_SERVERURL}/api/admin/updateImages`,
+        data,
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      dispatch(
+        setAlert({
+          severity: "success",
+          message: res.data.message,
+        })
+      );
+      dispatch(fetchTechnic());
+      setIsLoading(false);
+    } catch (error: any) {
+      CatchFunction(error);
+    }
+  };
+
   const deleteTechnic = async (id: number) => {
     try {
       setIsLoading(true);
@@ -215,6 +251,7 @@ const useAdmin = () => {
     getOrders,
     deleteOrder,
     updateStatus,
+    updateImage,
   };
 };
 

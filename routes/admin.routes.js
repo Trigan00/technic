@@ -10,9 +10,9 @@ const {
 
 const router = new Router();
 
-function nameConvert(filename) {
+function nameConvert(filename, timestamp) {
   const [name, extension] = filename.split(".");
-  return sh.unique(name) + "." + extension;
+  return sh.unique(name) + timestamp + "." + extension;
 }
 
 const storage = multer.diskStorage({
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
     cb(null, "technicImages/");
   },
   filename: (req, file, cb) => {
-    const name = nameConvert(file.originalname);
+    const name = nameConvert(file.originalname, req.body.timestamp);
     cb(null, name);
   },
 });
@@ -38,6 +38,7 @@ router.post("/addTechnic", upload.array("files"), async (req, res) => {
         shortDescription,
         characteristic,
         price,
+        timestamp,
       },
     } = req;
 
@@ -47,8 +48,8 @@ router.post("/addTechnic", upload.array("files"), async (req, res) => {
       fullDescription,
       shortDescription,
       characteristic,
-      imgname: nameConvert(files[0].originalname),
-      imgFileDescription: nameConvert(files[1].originalname),
+      imgname: nameConvert(files[0].originalname, timestamp),
+      imgFileDescription: nameConvert(files[1].originalname, timestamp),
       price: +price,
     });
 
@@ -130,6 +131,56 @@ router.put(
     }
   }
 );
+
+router.put("/updateImages/", upload.single("file"), async (req, res) => {
+  try {
+    const {
+      file,
+      body: { technicId, type, timestamp },
+    } = req;
+
+    const [technic] = await Technic.findAll({
+      where: {
+        id: +technicId,
+      },
+    });
+
+    if (type === "imgname") {
+      await unlink(
+        path.join(__dirname, "..", "technicImages", technic.dataValues.imgname)
+      );
+    } else {
+      await unlink(
+        path.join(
+          __dirname,
+          "..",
+          "technicImages",
+          technic.dataValues.imgFileDescription
+        )
+      );
+    }
+
+    console.log(file);
+    await Technic.update(
+      { [type]: nameConvert(file.originalname, timestamp) },
+      {
+        where: {
+          id: +technicId,
+        },
+      }
+    );
+
+    return res
+      .status(201)
+      .json({ status: "success", message: "Изображение обновлено." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failure",
+      message: "Something went wrong, try again",
+    });
+  }
+});
 
 router.get("/getOrders", async (req, res) => {
   try {

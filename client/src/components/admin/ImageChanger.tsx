@@ -8,6 +8,7 @@ interface ImageChangerProps {
   width: number;
   height: number;
   title: string;
+  url?: string;
 }
 
 const ImageChanger: React.FC<ImageChangerProps> = ({
@@ -16,6 +17,7 @@ const ImageChanger: React.FC<ImageChangerProps> = ({
   width,
   height,
   title,
+  url,
 }) => {
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -42,12 +44,19 @@ const ImageChanger: React.FC<ImageChangerProps> = ({
         onChange={changeHandler}
         accept="image/png, image/jpeg"
       />
-      {imgFile && (
+      {imgFile ? (
         <div
           className={styles.Image}
           style={{ maxWidth: width + "px", maxHeight: height + "px" }}
         >
           <img src={URL.createObjectURL(imgFile)} alt="TechnicImage" />
+        </div>
+      ) : (
+        <div
+          className={styles.Image}
+          style={{ maxWidth: width + "px", maxHeight: height + "px" }}
+        >
+          <img src={url} alt="TechnicImage" />
         </div>
       )}
     </div>
