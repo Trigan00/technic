@@ -90,6 +90,11 @@ router.delete("/deleteTechnic/:id", async (req, res) => {
         id: technicId,
       },
     });
+    await Allorders.destroy({
+      where: {
+        technicid: technicId,
+      },
+    });
 
     return res
       .status(201)
@@ -190,7 +195,7 @@ router.get("/getOrders", async (req, res) => {
 
     return res.status(200).json({
       status: "success",
-      orders: formattedArr,
+      orders: formattedArr || [],
     });
   } catch (error) {
     console.log(error);

@@ -4,6 +4,7 @@ import { useTypedDispatch } from "../store/hooks/useTypedDispatch";
 import { setAlert } from "../store/slices/alertSlice";
 import { fetchTechnic } from "../store/slices/technicSlice";
 import { useAuth } from "./useAuth";
+import { fetchOrders } from "../store/slices/orderSlice";
 
 const useAdmin = () => {
   const { token } = useAuth();
@@ -171,6 +172,7 @@ const useAdmin = () => {
         })
       );
       dispatch(fetchTechnic());
+      dispatch(fetchOrders(token || ""));
       setIsLoading(false);
     } catch (error: any) {
       CatchFunction(error);
