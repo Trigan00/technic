@@ -13,8 +13,20 @@ const sequelize = new Sequelize(
 const db = {};
 db.sequelize = sequelize;
 db.models = {};
-db.models.Person = require("./person")(sequelize, DataTypes);
-db.models.Technic = require("./technic")(sequelize, DataTypes);
-db.models.Allorders = require("./allorders")(sequelize, DataTypes);
+
+const Person = require("./person")(sequelize, DataTypes);
+const Technic = require("./technic")(sequelize, DataTypes);
+const Allorders = require("./allorders")(sequelize, DataTypes);
+
+Person.hasMany(Allorders);
+Allorders.belongsTo(Person);
+Technic.hasOne(Allorders);
+Allorders.belongsTo(Technic);
+
+db.models = {
+  Person,
+  Technic,
+  Allorders,
+};
 
 module.exports = db;

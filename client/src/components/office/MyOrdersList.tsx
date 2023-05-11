@@ -24,6 +24,7 @@ const MyOrdersList: React.FC<MyOrdersListProps> = ({ type }) => {
       const currentOrders = myOrders.ordersList.filter(
         (order) => order.status === "pending" || order.status === "given"
       );
+      // console.log(currentOrders);
       setOrders(currentOrders);
     } else {
       setOrders(myOrders.ordersList);
@@ -32,6 +33,7 @@ const MyOrdersList: React.FC<MyOrdersListProps> = ({ type }) => {
   }, [myOrders.status]);
 
   const getTechnicInfo = (id: number): TechnicState => {
+    // console.log(id);
     const index = technicList.findIndex((tec) => tec.id === id);
     return technicList[index];
   };

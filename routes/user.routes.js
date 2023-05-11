@@ -25,8 +25,8 @@ router.post("/order", async (req, res) => {
 
     const userOrders = await Allorders.findAll({
       where: {
-        userid: userId,
-        technicid: technicId,
+        personId: userId,
+        technicId: technicId,
         [Op.or]: [{ status: "pending" }, { status: "given" }],
       },
     });
@@ -39,8 +39,8 @@ router.post("/order", async (req, res) => {
     }
 
     const order = await Allorders.create({
-      userid: userId,
-      technicid: technicId,
+      personId: userId,
+      technicId: technicId,
       username,
       useremail,
       technicname,
@@ -53,7 +53,13 @@ router.post("/order", async (req, res) => {
     return res.status(201).json({
       status: "success",
       message: "Ваш заказ добавлен, ожидайте звонка",
-      order: order.dataValues,
+      order: {
+        id: order.dataValues.id,
+        status: order.dataValues.status,
+        userid: order.dataValues.personId,
+        technicid: order.dataValues.technicId,
+        dates: order.dataValues.dates,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -66,10 +72,10 @@ router.post("/order", async (req, res) => {
 
 router.get("/busyDays/:id", async (req, res) => {
   try {
-    const technicid = req.params.id;
+    const technicId = req.params.id;
     const busyDays = await Allorders.findAll({
       where: {
-        technicid,
+        technicId,
         [Op.or]: [{ status: "pending" }, { status: "given" }],
       },
     });
@@ -94,7 +100,7 @@ router.get("/busyDays/:id", async (req, res) => {
 
 router.get("/myOrders", async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const personId = req.user.userId;
 
     // let orders = [];
     // if (type === "current") {
@@ -107,7 +113,7 @@ router.get("/myOrders", async (req, res) => {
     // } else {
     const orders = await Allorders.findAll({
       where: {
-        userid: userId,
+        personId: personId,
       },
     });
     //}
@@ -115,8 +121,8 @@ router.get("/myOrders", async (req, res) => {
     const formattedArr = orders.map(({ dataValues }) => {
       return {
         id: dataValues.id,
-        userid: dataValues.userid,
-        technicid: dataValues.technicid,
+        userid: dataValues.personId,
+        technicid: dataValues.technicId,
         dates: dataValues.dates,
         status: dataValues.status,
       };

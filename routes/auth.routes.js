@@ -13,11 +13,11 @@ const {
 } = require("../models");
 
 const generateToken = (id) => {
-  // return jwt.sign({ userId: id }, process.env.jwtSecret); // without expire
+  return jwt.sign({ userId: id }, process.env.jwtSecret); // without expire
   // if time has passed, you must also check when you first visit the page whether the time has expired
-  return jwt.sign({ userId: id }, process.env.jwtSecret, {
-    expiresIn: "24h",
-  });
+  // return jwt.sign({ userId: id }, process.env.jwtSecret, {
+  //   expiresIn: "24h",
+  // });
 };
 
 // /api/auth/register

@@ -85,14 +85,15 @@ router.delete("/deleteTechnic/:id", async (req, res) => {
       )
     );
 
+    await Allorders.destroy({
+      where: {
+        technicId: technicId,
+      },
+    });
+
     await Technic.destroy({
       where: {
         id: technicId,
-      },
-    });
-    await Allorders.destroy({
-      where: {
-        technicid: technicId,
       },
     });
 
