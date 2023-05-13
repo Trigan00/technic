@@ -2,6 +2,8 @@ import moment from "moment";
 import styles from "./Grid.module.scss";
 import React from "react";
 import { useTheme } from "@mui/material";
+import { useTypedDispatch } from "../../store/hooks/useTypedDispatch";
+import { setAlert } from "../../store/slices/alertSlice";
 
 interface GridProps {
   startDay: moment.Moment;
@@ -18,16 +20,24 @@ const Grid: React.FC<GridProps> = ({
   setDatesList,
   busyDays,
 }) => {
+  const dispatch = useTypedDispatch();
   const day = startDay.clone().subtract(1, "day");
   const daysArr = [...Array(42)].map(() => day.add(1, "day").clone());
   const theme = useTheme();
   const color = theme.palette.primary.main;
 
-  const pickDate = (date: string) => {
-    if (busyDays.includes(date)) return;
-    if (datesList.includes(date))
-      return setDatesList((prev) => prev.filter((el) => el !== date));
-    setDatesList((prev: any) => [...prev, date]);
+  const pickDate = (formattedDate: string, date: moment.Moment) => {
+    if (busyDays.includes(formattedDate)) return;
+    if (date.isBefore(moment()) && !date.isSame(moment(), "day"))
+      return dispatch(
+        setAlert({
+          severity: "error",
+          message: "Выбрана неверная дата",
+        })
+      );
+    if (datesList.includes(formattedDate))
+      return setDatesList((prev) => prev.filter((el) => el !== formattedDate));
+    setDatesList((prev: any) => [...prev, formattedDate]);
   };
 
   return (
@@ -62,7 +72,7 @@ const Grid: React.FC<GridProps> = ({
                 : "none",
             }}
             onClick={() => {
-              pickDate(dayItem.format("DD.MM.YYYY"));
+              pickDate(dayItem.format("DD.MM.YYYY"), dayItem);
             }}
           >
             <div className={styles.rowInCell}>
