@@ -8,7 +8,8 @@ const router = new Router();
 
 router.post("/order", async (req, res) => {
   try {
-    const { technicId, dates, username, useremail, technicname } = req.body;
+    const { technicId, dates, username, useremail, technicname, address } =
+      req.body;
     const userId = req.user.userId;
 
     const users = await Person.findAll({
@@ -46,6 +47,7 @@ router.post("/order", async (req, res) => {
       technicname,
       dates: dates.join("-"),
       status: "pending",
+      address,
     });
 
     orderMailer(useremail, username, technicname);
@@ -125,6 +127,7 @@ router.get("/myOrders", async (req, res) => {
         technicid: dataValues.technicId,
         dates: dataValues.dates,
         status: dataValues.status,
+        address: dataValues.address,
       };
     });
 

@@ -71,7 +71,7 @@ const Calendar: React.FC<CalendarProps> = ({
   const nextMonthHandler = () =>
     setToday((prev) => prev.clone().add(1, "month"));
 
-  const orderHandler = async () => {
+  const orderHandler = async (address: string) => {
     // await createOrder(technicId, datesList);
     if (!token || !email || !username)
       return dispatch(
@@ -89,6 +89,7 @@ const Calendar: React.FC<CalendarProps> = ({
         username,
         userEmail: email,
         technicname: technicname,
+        address,
       })
     );
     setIsModal(false);

@@ -30,7 +30,7 @@ const activationMailer = (to, link) => {
         console.log("Something went wrong", error);
       }
       if (info) {
-        console.log("Mail send successfully");
+        console.log("Activation mail send successfully");
       }
     }
   );
@@ -62,4 +62,29 @@ const orderMailer = (email, username, technicname) => {
   );
 };
 
-module.exports = { activationMailer, orderMailer };
+const forgetPasswordMailer = (to, link) => {
+  transporter.sendMail(
+    {
+      from: "RinazTechnic <mytest_90@mail.ru>",
+      to,
+      subject: "Password Reset Request on " + process.env.API_URL,
+      text: "",
+      html: `
+              <div>
+                  <h1>Please click on this link to reset your password</h1>
+                  <a href="${link}">${link}</a>
+              </div>
+          `,
+    },
+    (error, info) => {
+      if (error) {
+        console.log("Something went wrong", error);
+      }
+      if (info) {
+        console.log("Password Reset mail send successfully");
+      }
+    }
+  );
+};
+
+module.exports = { activationMailer, orderMailer, forgetPasswordMailer };

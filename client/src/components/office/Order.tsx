@@ -27,53 +27,56 @@ const Order: React.FC<OrderProps> = ({ technicInfo, orderInfo }) => {
   };
 
   return (
-    <div className={styles.Order}>
-      <div className={styles.Title}>
-        <h3>{technicInfo.name}</h3>
-        <div className={styles.Image}>
-          <img
-            style={{
-              display: "block",
-              objectFit: "cover",
-            }}
-            src={`${process.env.REACT_APP_SERVERURL}/${technicInfo.imgname}`}
-            alt="technicImage"
-          ></img>
-        </div>
-      </div>
-      <div className={styles.Dates}>
-        {orderInfo.dates.split("-").map((date) => (
-          <span key={date}>{date}</span>
-        ))}
-      </div>
-      <div className={styles.Right}>
-        <div
-          className={styles.Status}
-          style={{
-            color: chooseColorOrTranslate(orderInfo.status, true),
-          }}
-        >
-          {chooseColorOrTranslate(orderInfo.status, false)}
-        </div>
-
-        {orderInfo.status === "pending" && (
-          <>
-            <div className={styles.Line}></div>
-            <Button
-              color="error"
-              onClick={() => {
-                setModalInfo({
-                  name: technicInfo.name,
-                  id: orderInfo.id,
-                });
-                setIsModal(true);
+    <div className={styles.Wrapper}>
+      <div className={styles.Order}>
+        <div className={styles.Title}>
+          <h3>{technicInfo.name}</h3>
+          <div className={styles.Image}>
+            <img
+              style={{
+                display: "block",
+                objectFit: "cover",
               }}
-            >
-              Удалить
-            </Button>
-          </>
-        )}
+              src={`${process.env.REACT_APP_SERVERURL}/${technicInfo.imgname}`}
+              alt="technicImage"
+            ></img>
+          </div>
+        </div>
+        <div className={styles.Dates}>
+          {orderInfo.dates.split("-").map((date) => (
+            <span key={date}>{date}</span>
+          ))}
+        </div>
+        <div className={styles.Right}>
+          <div
+            className={styles.Status}
+            style={{
+              color: chooseColorOrTranslate(orderInfo.status, true),
+            }}
+          >
+            {chooseColorOrTranslate(orderInfo.status, false)}
+          </div>
+
+          {orderInfo.status === "pending" && (
+            <>
+              <div className={styles.Line}></div>
+              <Button
+                color="error"
+                onClick={() => {
+                  setModalInfo({
+                    name: technicInfo.name,
+                    id: orderInfo.id,
+                  });
+                  setIsModal(true);
+                }}
+              >
+                Удалить
+              </Button>
+            </>
+          )}
+        </div>
       </div>
+      <div className={styles.Address}>Адрес: {orderInfo.address}</div>
       <DeleteModal
         isModal={isModal}
         setIsModal={setIsModal}

@@ -8,6 +8,7 @@ export interface OrderState {
   technicid: number;
   dates: string;
   status: string;
+  address: string;
 }
 
 interface InitialState {
@@ -28,6 +29,7 @@ type OrderPayload = {
   technicId: number;
   datesList: string[];
   token: string;
+  address: string;
 };
 type DeletePayload = {
   id: number;
@@ -67,6 +69,7 @@ export const addNewOrder = createAsyncThunk(
           username: payload.username,
           useremail: payload.userEmail,
           technicname: payload.technicname,
+          address: payload.address,
         },
         { headers: { authorization: "Bearer " + payload.token } }
       );

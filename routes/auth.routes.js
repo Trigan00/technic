@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const { body, validationResult } = require("express-validator");
-const { activationMailer } = require("../mailService");
+const { activationMailer, forgetPasswordMailer } = require("../mailService");
 const router = new Router();
 const authMiddleware = require("../middleware/auth.middleware");
 require("dotenv").config();
@@ -194,5 +194,116 @@ router.get("/validateToken", authMiddleware.decodeToken, async (req, res) => {
     });
   }
 });
+
+router.post(
+  "/forget-password",
+  [body("email", "Uncorrected email").isEmail()],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          status: "failure",
+          errors: errors.array(),
+          message: "Incorrect data during registration",
+        });
+      }
+
+      const { email } = req.body;
+      const users = await Person.findAll({
+        where: {
+          email,
+        },
+      });
+      if (!users.length) {
+        return res.status(400).json({
+          status: "failure",
+          message: "Пользователь не найден", // login
+        });
+      }
+
+      const user = users[0];
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        process.env.jwtSecret,
+        {
+          expiresIn: "15min",
+        }
+      );
+
+      forgetPasswordMailer(
+        email,
+        `${process.env.CLIENT_URL}/reset-password/${token}`
+      );
+
+      return res.status(201).json({
+        status: "success",
+        message: "Письмо отправлено на почту",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failure",
+        message: "Something went wrong, try again",
+      });
+    }
+  }
+);
+
+router.put(
+  "/update-password",
+  [
+    body("password", "The minimum password length is 6 characters").isLength({
+      min: 6,
+    }),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          status: "failure",
+          errors: errors.array(),
+          message: "Incorrect data during registration",
+        });
+      }
+      const { password, token } = req.body;
+
+      if (!token) {
+        return res.status(401).json({ message: "Время и Стекло" });
+      }
+
+      const decoded = jwt.verify(token, process.env.jwtSecret);
+      if (!decoded) res.status(401).json({ message: "Время и Стекло" });
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const person = await Person.update(
+        { password: hashedPassword },
+        {
+          where: {
+            email: decoded.email,
+          },
+        }
+      );
+
+      if (!person)
+        return res.status(400).json({
+          status: "failure",
+          message: "Пользователь не найден",
+        });
+
+      return res.status(201).json({
+        status: "success",
+        message: "Пароль пользователя успешно изменен",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failure",
+        message: "Время и Стекло",
+      });
+    }
+  }
+);
 
 module.exports = router;

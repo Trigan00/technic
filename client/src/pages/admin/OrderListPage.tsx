@@ -22,6 +22,7 @@ const OrderListPage: React.FC = () => {
   useEffect(() => {
     (async () => {
       const res = await getOrders();
+      console.log(res);
       setOrders(res);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,8 +57,15 @@ const OrderListPage: React.FC = () => {
             <div className={styles.Order} key={order.id}>
               <div className={styles.Top}>
                 <div>
-                  <div className={styles.userEmail}>{order.useremail}</div>
-                  <div className={styles.TechnicName}>{order.technicname}</div>
+                  <div className={styles.userEmail}>
+                    Email: {order.useremail}
+                  </div>
+                  <div className={styles.TechnicName}>
+                    Техника: {order.technicname}
+                  </div>
+                  <div className={styles.TechnicName}>
+                    Адрес: {order.address}
+                  </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <StatusChanger

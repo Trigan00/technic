@@ -1,4 +1,4 @@
-import { Card, useTheme } from "@mui/material";
+import { Card, Grid, useTheme } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import Login from "../components/Login";
@@ -20,12 +20,24 @@ const LoginPage: React.FC = () => {
       <h3 style={{ textAlign: "center" }}>Вход</h3>
       <Login />
 
-      <Link
-        to={publicConsts.REGISTRATION_ROUTE}
-        style={{ color: theme.palette.primary.main, marginLeft: "10px" }}
-      >
-        Создать аккаунт
-      </Link>
+      <Grid container>
+        <Grid item xs>
+          <Link
+            to={publicConsts.FORGET_PASSWORD_ROUTE}
+            style={{ color: theme.palette.primary.main }}
+          >
+            Забыли пароль?
+          </Link>
+        </Grid>
+        <Grid item>
+          <Link
+            to={publicConsts.REGISTRATION_ROUTE}
+            style={{ color: theme.palette.primary.main }}
+          >
+            Создать аккаунт
+          </Link>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

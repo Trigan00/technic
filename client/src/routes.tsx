@@ -10,6 +10,8 @@ import TechnicPage from "./pages/TechnicPage";
 import EditTechnicPage from "./pages/admin/EditTechnicPage";
 import CurrentOrdersPage from "./pages/office/CurrentOrdersPage";
 import AllOrdersPage from "./pages/office/AllOrdersPage";
+import ForgetPasswordPage from "./pages/ForgetPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 export const adminRoutes = [
   {
@@ -42,6 +44,14 @@ export const publicRoutes = [
   {
     path: publicConsts.REGISTRATION_ROUTE,
     Component: RegisterPage,
+  },
+  {
+    path: publicConsts.FORGET_PASSWORD_ROUTE,
+    Component: ForgetPasswordPage,
+  },
+  {
+    path: publicConsts.RESET_PASSWORD_ROUTE + "/:token",
+    Component: ResetPasswordPage,
   },
   {
     path: publicConsts.TECHNIC_ROUTE + "/:id",

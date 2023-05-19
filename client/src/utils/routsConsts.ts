@@ -2,6 +2,8 @@ export const publicConsts = {
   HOME_ROUTE: "/",
   LOGIN_ROUTE: "/login",
   REGISTRATION_ROUTE: "/registration",
+  FORGET_PASSWORD_ROUTE: "/forget-password",
+  RESET_PASSWORD_ROUTE: "/reset-password",
   TECHNIC_ROUTE: "/technic",
 };
 export const adminConsts = {

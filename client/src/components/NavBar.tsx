@@ -22,6 +22,7 @@ const NavBar: React.FC = () => {
 
   const signOutHandler = () => {
     logout();
+    navigate(publicConsts.HOME_ROUTE);
   };
 
   return (

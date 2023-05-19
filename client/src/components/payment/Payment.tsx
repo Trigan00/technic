@@ -1,5 +1,5 @@
 import { Box, Button, DialogTitle, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Payment.module.scss";
 
 const style = {
@@ -15,11 +15,13 @@ const style = {
 };
 
 interface PaymentProps {
-  orderHandler: () => void;
+  orderHandler: (address: string) => void;
   setIsPayment: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Payment: React.FC<PaymentProps> = ({ orderHandler, setIsPayment }) => {
+  const [address, setAddress] = useState("");
+
   return (
     <Box sx={style}>
       <DialogTitle style={{ textAlign: "center" }}>Оплата</DialogTitle>
@@ -30,6 +32,8 @@ const Payment: React.FC<PaymentProps> = ({ orderHandler, setIsPayment }) => {
           label="Адрес"
           variant="outlined"
           fullWidth
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -55,7 +59,7 @@ const Payment: React.FC<PaymentProps> = ({ orderHandler, setIsPayment }) => {
           type="number"
         />
         <div>
-          <Button variant="contained" onClick={() => orderHandler()}>
+          <Button variant="contained" onClick={() => orderHandler(address)}>
             Оплатить
           </Button>
           <Button onClick={() => setIsPayment(false)}>Закрыть</Button>
