@@ -1,8 +1,5 @@
 .technicWrapper {
   margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
 
   .TechnicType {
     margin-top: 20px;
@@ -19,6 +16,12 @@
       background-color: lightgray;
     }
   }
+}
+
+.CardsWrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .TechnicCard {

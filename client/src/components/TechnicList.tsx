@@ -25,40 +25,42 @@ const TechnicList: React.FC = () => {
         <div className={styles.TechnicType} key={technicType}>
           <h1 className={styles.TypeTitle}>{technicType}</h1>
           <div className={styles.Line} />
-          {technicList.map(
-            ({ id, name, type, shortDescription, imgname, price }) => {
-              if (type !== technicType) return <div key={id} />;
-              return (
-                <div
-                  key={id}
-                  className={styles.TechnicCard}
-                  onClick={() =>
-                    navigate(publicConsts.TECHNIC_ROUTE + "/" + id.toString())
-                  }
-                >
-                  <h3>{name}</h3>
-                  <img
-                    width="225px"
-                    height="120px"
-                    style={{
-                      display: "block",
-                      objectFit: "cover",
-                    }}
-                    src={`${process.env.REACT_APP_SERVERURL}/${imgname}`}
-                    alt="technicImage"
-                  />
-                  <div className={styles.Description}>
-                    {<Sanitize html={shortDescription} />}
+          <div className={styles.CardsWrapper}>
+            {technicList.map(
+              ({ id, name, type, shortDescription, imgname, price }) => {
+                if (type !== technicType) return <div key={id} />;
+                return (
+                  <div
+                    key={id}
+                    className={styles.TechnicCard}
+                    onClick={() =>
+                      navigate(publicConsts.TECHNIC_ROUTE + "/" + id.toString())
+                    }
+                  >
+                    <h3>{name}</h3>
+                    <img
+                      width="225px"
+                      height="120px"
+                      style={{
+                        display: "block",
+                        objectFit: "cover",
+                      }}
+                      src={`${process.env.REACT_APP_SERVERURL}/${imgname}`}
+                      alt="technicImage"
+                    />
+                    <div className={styles.Description}>
+                      {<Sanitize html={shortDescription} />}
+                    </div>
+                    <div className={styles.Price}>
+                      <div className={styles.line} />
+                      <span>Стоимость за смену 8ч.</span>
+                      {price} &#x20bd;
+                    </div>
                   </div>
-                  <div className={styles.Price}>
-                    <div className={styles.line} />
-                    <span>Стоимость за смену 8ч.</span>
-                    {price} &#x20bd;
-                  </div>
-                </div>
-              );
-            }
-          )}
+                );
+              }
+            )}
+          </div>
         </div>
       ))}
     </div>
