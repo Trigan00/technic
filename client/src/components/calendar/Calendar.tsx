@@ -81,6 +81,14 @@ const Calendar: React.FC<CalendarProps> = ({
         })
       );
     if (!datesList.length) return;
+    if (!address.trim()) {
+      return dispatch(
+        setAlert({
+          severity: "error",
+          message: "Некорректный адрес",
+        })
+      );
+    }
     dispatch(
       addNewOrder({
         technicId,
